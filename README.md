@@ -8,6 +8,7 @@
     - React
     - TypeScript
     - RTK Query
+    - Styled-components
     - Redux
     - WebSockets
     - Express server
