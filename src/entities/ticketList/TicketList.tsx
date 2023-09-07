@@ -32,7 +32,7 @@ const TicketListStyled = styled.ul`
   }
 
   scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1; /* поддержка Firefox */
+  scrollbar-color: #888 #f1f1f1;
 `
 
 export function TicketList() {
