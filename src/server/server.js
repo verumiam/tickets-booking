@@ -14,19 +14,19 @@ const wss = new WebSocket.Server({ server });
 const data = tickets;
 
 wss.on('connection', (ws) => {
-    console.log('Client connected');
+  console.log('Client connected');
 
-    ws.send(JSON.stringify(data));
+  ws.send(JSON.stringify(data));
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
 });
 
 app.get('/tickets', (req, res) => {
-    res.json(data);
+  res.json(data);
 });
 
 server.listen(8080, () => {
-    console.log('Server is listening on port 8080');
+  console.log('Server is listening on port 8080');
 });

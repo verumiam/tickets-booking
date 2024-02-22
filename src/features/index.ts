@@ -1,1 +1,1 @@
-export {default as TicketsFilter} from './ticketsFilter/TicketsFilter'
+export { default as TicketsFilter } from './ticketsFilter/TicketsFilter';

@@ -1,3 +1,3 @@
 export type SkeletonBoxProps = {
-    big?: boolean;
+  big?: boolean;
 };

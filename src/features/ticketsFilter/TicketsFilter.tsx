@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import FilterCurrency from "./components/filterCurrency/FilterCurrency";
-import FilterTransplants from "./components/filterTransplants/FilterTransplants";
-import FilterStartDate from "./components/filterStartDate/filterStartDate";
-import React from "react";
+import styled from 'styled-components';
+import FilterCurrency from './components/filterCurrency/FilterCurrency';
+import FilterTransplants from './components/filterTransplants/FilterTransplants';
+import FilterStartDate from './components/filterStartDate/filterStartDate';
+import React from 'react';
 
 const TicketsFilterStyled = styled.div`
   background-color: var(--color-white);
@@ -16,7 +16,7 @@ const TicketsFilterStyled = styled.div`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-`
+`;
 
 export const FilterTitleStyled = styled.h5`
   color: var(--color-black);
@@ -25,16 +25,16 @@ export const FilterTitleStyled = styled.h5`
   font-weight: 500;
   line-height: 34px;
   text-transform: uppercase;
-`
+`;
 
 export function TicketsFilter() {
-    return (
-        <TicketsFilterStyled>
-            <FilterCurrency/>
-            <FilterTransplants/>
-            <FilterStartDate/>
-        </TicketsFilterStyled>
-    );
+  return (
+    <TicketsFilterStyled>
+      <FilterCurrency />
+      <FilterTransplants />
+      <FilterStartDate />
+    </TicketsFilterStyled>
+  );
 }
 
 export default React.memo(TicketsFilter);

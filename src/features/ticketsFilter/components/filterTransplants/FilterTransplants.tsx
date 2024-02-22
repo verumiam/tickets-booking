@@ -1,8 +1,7 @@
-import {FilterTitleStyled} from "../../TicketsFilter";
-import styled from "styled-components";
-import {ChangeEvent, useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../../shared/hooks/hooks";
-import {setTransplants} from "../../../../entities/ticketList/model/slices/filterSlices";
+import styled from 'styled-components';
+
+import { FilterTitleStyled } from '../../TicketsFilter';
+import useTransplantsFilter from '../../../../shared/hooks/useTransplantsFilter.hook';
 
 const CheckboxContainer = styled.div`
   margin-bottom: 8px;
@@ -40,66 +39,36 @@ const CheckboxInput = styled.input`
   }
 `;
 
-export function FilterTransplants() {
-    const filterStore = useAppSelector(state => state.filters.transplants)
-    const [selected, setSelected] = useState<number[]>(filterStore || []);
-    const dispatch = useAppDispatch();
+const labels = {
+  '-1': 'Все',
+  '0': 'Без пересадок',
+  '1': '1 пересадка',
+  '2': '2 пересадки',
+  '3': '3 пересадки',
+};
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = e.target;
-        const intValue = parseInt(value);
+function FilterTransplants() {
+  const { selected, handleChange } = useTransplantsFilter();
 
-        let newSelection: number[];
-
-        if (intValue === -1) {
-            if (checked) {
-                newSelection = [-1];
-            } else {
-                newSelection = selected.filter(item => item !== -1);
-            }
-        } else {
-            if (checked) {
-                newSelection = [...selected, intValue];
-            } else {
-                newSelection = selected.filter(item => item !== intValue);
-            }
-        }
-
-        setSelected(newSelection);
-        dispatch(setTransplants(newSelection));
-    };
-
-
-    const labels = {
-        '-1': 'Все',
-        '0': 'Без пересадок',
-        '1': '1 пересадка',
-        '2': '2 пересадки',
-        '3': '3 пересадки'
-    }
-
-    return (
-        <div>
-            <FilterTitleStyled>
-                Количество пересадок
-            </FilterTitleStyled>
-
-            {Object.entries(labels).map(([key, label]) => (
-                <CheckboxContainer key={label}>
-                    <CheckboxInput
-                        type="checkbox"
-                        id={label}
-                        value={key}
-                        onChange={handleChange}
-                        checked={selected.includes(parseInt(key))}
-                    />
-                    <label htmlFor={label}>
-                        {label}
-                    </label>
-                </CheckboxContainer>
-            )).reverse()}
-        </div>
-    );
+  return (
+    <div>
+      <FilterTitleStyled>Количество пересадок</FilterTitleStyled>
+      {Object.entries(labels)
+        .reverse()
+        .map(([key, label]) => (
+          <CheckboxContainer key={key}>
+            <CheckboxInput
+              type="checkbox"
+              id={label}
+              value={key}
+              onChange={handleChange}
+              checked={selected.includes(parseInt(key))}
+            />
+            <label htmlFor={label}>{label}</label>
+          </CheckboxContainer>
+        ))}
+    </div>
+  );
 }
 
 export default FilterTransplants;

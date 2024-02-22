@@ -1,8 +1,7 @@
-import React from 'react';
-import {TicketList} from "../entities";
-import {createGlobalStyle} from "styled-components";
-import {Layout} from "../shared";
-import {TicketsFilter} from "../features";
+import { TicketList } from '../entities';
+import { createGlobalStyle } from 'styled-components';
+import { Layout } from '../shared';
+import { TicketsFilter } from '../features';
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -36,16 +35,16 @@ const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
   }
-`
+`;
 
 function App() {
   return (
     <div className="App">
-        <GlobalStyles/>
-        <Layout>
-            <TicketsFilter/>
-            <TicketList/>
-        </Layout>
+      <GlobalStyles />
+      <Layout>
+        <TicketsFilter />
+        <TicketList />
+      </Layout>
     </div>
   );
 }

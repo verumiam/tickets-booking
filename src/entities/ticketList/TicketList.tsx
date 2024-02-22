@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import Ticket from "./components/ticket/Ticket";
-import {useGetTicketsQuery} from "./model/api/ticketsApi";
-import {useAppSelector} from "../../shared/hooks/hooks";
-import React, {useMemo} from "react";
-import TicketSkeleton from "./components/ticket/TicketSkeleton";
-import {TicketProps} from "./types/TicketsResponse";
+import styled from 'styled-components';
+import Ticket from './components/ticket/Ticket';
+import React from 'react';
+import TicketSkeleton from './components/ticket/TicketSkeleton';
+import { useAppSelector } from '../../shared/hooks/hooks';
+import { useGetTicketsQuery } from './model/api/ticketsApi';
+import { TicketProps } from './types/TicketsResponse';
 
 const TicketListStyled = styled.ul`
   height: 700px;
@@ -33,64 +33,72 @@ const TicketListStyled = styled.ul`
 
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
-`
+`;
 
 export function TicketList() {
-    const {data, isLoading, isError} = useGetTicketsQuery();
-    const startDate = useAppSelector(state => state.filters.startDate);
-    const transplants = useAppSelector(state => state.filters.transplants);
+  const { data, isLoading, isError } = useGetTicketsQuery();
+  const transplantsFilter = useAppSelector((state) => state.filters.transplants);
+  const startDateFilter = useAppSelector((state) => state.filters.startDate);
 
-    const getTransplantLabel = (stops: number) => {
-        switch (stops) {
-            case 0:
-                return 'Без пересадок';
-            case 1:
-                return '1 пересадка';
-            case 2:
-                return '2 пересадки';
-            case 3:
-                return '3 пересадки';
-            default:
-                return `${stops} пересадок`;
-        }
-    }
-
-    const filteredTickets = data?.tickets.filter((ticket: TicketProps) => {
-        let validDate = startDate ? ticket.departure_date === startDate : true;
-        let validTransplants = transplants.includes(-1) || transplants.includes(ticket.stops);
-
-        return validDate && validTransplants;
-    });
-
-    if (isLoading) {
-        return (
-            <TicketListStyled>
-                {Array.from({length: 3}).map((_, idx) => <TicketSkeleton key={idx}/>)}
-            </TicketListStyled>
-        )
-    }
-
-    if (isError) {
-        return <TicketListStyled>
-            Произошли технические ошибки на сервере. Попробуйте перезагрузить страницу.
-        </TicketListStyled>
-    }
-
-    if (filteredTickets?.length === 0) {
-        return (
-            <TicketListStyled>
-                К сожалению, но на данный момент билеты с такими параметрами - отсутствуют.
-            </TicketListStyled>
-        )
-    }
-
+  if (isLoading) {
     return (
-        <TicketListStyled>
-            {filteredTickets?.map((ticket) => (
-                <Ticket key={ticket.origin + ticket.destination} data={ticket}/>
-            ))}
-        </TicketListStyled>
+      <TicketListStyled>
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <TicketSkeleton key={idx} />
+        ))}
+      </TicketListStyled>
     );
+  }
+
+  if (isError) {
+    return (
+      <TicketListStyled>
+        Произошли технические ошибки на сервере. Попробуйте перезагрузить страницу.
+      </TicketListStyled>
+    );
+  }
+
+  const filterTickets = (ticket: TicketProps) => {
+    if (!startDateFilter || startDateFilter === '') {
+      if (!transplantsFilter || transplantsFilter.includes(-1)) {
+        return true;
+      }
+
+      const stops = ticket.stops;
+      if (transplantsFilter.includes(stops)) {
+        return true;
+      }
+      return false;
+    }
+
+    const [day, month, year] = ticket.departure_date.split('.').map(Number);
+    const ticketDepartureDate = new Date(2000 + year, month - 1, day);
+
+    const [filterDay, filterMonth, filterYear] = startDateFilter.split('.').map(Number);
+    const startDateFilterDate = new Date(2000 + filterYear, filterMonth - 1, filterDay);
+
+    if (ticketDepartureDate.getTime() !== startDateFilterDate.getTime()) {
+      return false;
+    }
+
+    if (!transplantsFilter || transplantsFilter.includes(-1)) {
+      return true;
+    }
+
+    const stops = ticket.stops;
+    if (transplantsFilter.includes(stops)) {
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <TicketListStyled>
+      {data?.tickets
+        ?.filter(filterTickets)
+        .map((ticket) => <Ticket key={ticket.origin + ticket.destination} data={ticket} />)}
+    </TicketListStyled>
+  );
 }
 
 export default TicketList;

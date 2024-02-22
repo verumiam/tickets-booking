@@ -1,3 +1,3 @@
 export type ButtonTypes = {
-    price: number
-}
+  price: number;
+};
