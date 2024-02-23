@@ -8,9 +8,8 @@
     - React
     - TypeScript
     - RTK Query
-    - Styled-components
     - Redux
-    - WebSockets
+    - Styled-components
     - Express server
 
 Для запуска приложения и сервера на Node.js требуется:
